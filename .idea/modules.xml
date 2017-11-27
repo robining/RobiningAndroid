@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/RobiningAndroid.iml" filepath="$PROJECT_DIR$/RobiningAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame/config/config.iml" filepath="$PROJECT_DIR$/frame/config/config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame/frame.iml" filepath="$PROJECT_DIR$/frame/frame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame/helper/helper.iml" filepath="$PROJECT_DIR$/frame/helper/helper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame/uiimpl/uiimpl.iml" filepath="$PROJECT_DIR$/frame/uiimpl/uiimpl.iml" />
+    </modules>
+  </component>
+</project>

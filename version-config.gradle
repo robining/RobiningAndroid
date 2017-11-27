@@ -1,0 +1,38 @@
+ext {
+    versions = [
+            "compileSdkVersion"    : 26,
+            "buildToolsVersion"    : "26.0.0",
+            "minSdkVersion"        : 15,
+            "targetSdkVersion"     : 26,
+            "versionCode"          : 1,
+            "versionName"          : "1.0",
+            "androidSupportVersion": "25.3.1",
+            "rxlifecycleVersion"   : "2.0.1",
+            "retrofit2Version"     : "2.2.0",
+            "butterknife"          : "8.5.1"
+    ]
+    dependencies = [
+            "junit"                    : "junit:junit:4.12",
+            "appcompat-v7"             : "com.android.support:appcompat-v7:${versions["androidSupportVersion"]}",
+            "recyclerview"             : "com.android.support:recyclerview-v7:${versions["androidSupportVersion"]}",
+            "cardview-v7"              : "com.android.support:cardview-v7:${versions["androidSupportVersion"]}",
+            "support-v4"               : "com.android.support:support-v4:${versions["androidSupportVersion"]}",
+            "support-design"           : "com.android.support:design:${versions["androidSupportVersion"]}",
+            "support-percent"          : "com.android.support:percent:${versions["androidSupportVersion"]}",
+            "rxjava2"                  : "io.reactivex.rxjava2:rxjava:2.0.7",
+            "rxandroid2"               : "io.reactivex.rxjava2:rxandroid:2.0.1",
+            "rxpermission2"            : "com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar",
+            "rxlifecycle2"             : "com.trello.rxlifecycle2:rxlifecycle:${versions["rxlifecycleVersion"]}",
+            "rxlifecycle2-android"     : "com.trello.rxlifecycle2:rxlifecycle-android:${versions["rxlifecycleVersion"]}",
+            "rxlifecycle2-components"  : "com.trello.rxlifecycle2:rxlifecycle-components:${versions["rxlifecycleVersion"]}",
+            "gifdrawable"              : "pl.droidsonroids.gif:android-gif-drawable:1.2.5",
+            "constraint-layout"        : "com.android.support.constraint:constraint-layout:1.0.2",
+            "retrofit2"                : "com.squareup.retrofit2:retrofit:${versions["retrofit2Version"]}",
+            "retrofit2-converter-gson" : "com.squareup.retrofit2:converter-gson:${versions["retrofit2Version"]}",
+            "retrofit2-adapter-rxjava2": "com.squareup.retrofit2:adapter-rxjava2:${versions["retrofit2Version"]}",
+            "butterknife"              : "com.jakewharton:butterknife:${versions["butterknife"]}",
+            "butterknife-compiler"     : "com.jakewharton:butterknife-compiler:${versions["butterknife"]}",
+            "glide"                    : "com.github.bumptech.glide:glide:3.8.0",
+            "eventbus"                 : "org.greenrobot:eventbus:3.0.0"
+    ]
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_color">#F4723E</color>
+    <color name="default_menu_bg_n">#fff</color>
+    <color name="default_menu_bg_p">#eee</color>
+
+    <color name="color_333">#333333</color>
+    <color name="color_666">#666666</color>
+    <color name="color_999">#999999</color>
+
+    <color name="color_bg_toast_or_dialog">#60000000</color>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ResizeDrawableAttrs">
+        <!--优先级0-->
+        <attr name="drawableSize" format="dimension"/>
+        <!--优先级1-->
+        <attr name="drawableLeftSize" format="dimension"/>
+        <attr name="drawableTopSize" format="dimension"/>
+        <attr name="drawableRightSize" format="dimension"/>
+        <attr name="drawableBottomSize" format="dimension"/>
+        <!--优先级2-->
+        <attr name="drawableLeftWidth" format="dimension"/>
+        <attr name="drawableLeftHeight" format="dimension"/>
+        <attr name="drawableTopWidth" format="dimension"/>
+        <attr name="drawableTopHeight" format="dimension"/>
+        <attr name="drawableRightWidth" format="dimension"/>
+        <attr name="drawableRightHeight" format="dimension"/>
+        <attr name="drawableBottomWidth" format="dimension"/>
+        <attr name="drawableBottomHeight" format="dimension"/>
+    </declare-styleable>
+</resources>
