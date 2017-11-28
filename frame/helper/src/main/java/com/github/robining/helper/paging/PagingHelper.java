@@ -17,7 +17,7 @@ public class PagingHelper<T> implements IRefreshLayout.OnRefreshLoadMoreListener
     private Builder builder;
     private ICallback<T> callback;
     private IPagingRequest request;
-    private boolean haveMoreData = true;
+    private boolean haveMoreData = false;
     private int curPageIndex;//当前页码
     private boolean haveData;//是否已有数据
     private ILoadingHelper.OnRetryListener retryListener = new ILoadingHelper.OnRetryListener() {
@@ -36,7 +36,7 @@ public class PagingHelper<T> implements IRefreshLayout.OnRefreshLoadMoreListener
 
     public void init() {
         this.curPageIndex = builder.getStartPagerNumber() - 1;
-        haveMoreData = true;
+        haveMoreData = false;
         haveData = false;
 
         if (builder.getRefreshLayout() != null) {
