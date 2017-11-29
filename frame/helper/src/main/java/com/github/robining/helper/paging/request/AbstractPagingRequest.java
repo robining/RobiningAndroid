@@ -8,6 +8,8 @@ import com.github.robining.helper.transformers.PagingTransformer;
 import java.util.Collection;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * 功能描述:@TODO 填写功能描述
@@ -18,6 +20,7 @@ import io.reactivex.Observable;
 public abstract class AbstractPagingRequest<T, C extends ICallback<T>> implements IPagingRequest {
     private PagingHelper pagingHelper;
     private C callback;
+    private Disposable currentRequest;
 
     public AbstractPagingRequest(PagingHelper pagingHelper, C callback) {
         this.pagingHelper = pagingHelper;
@@ -26,8 +29,18 @@ public abstract class AbstractPagingRequest<T, C extends ICallback<T>> implement
 
     @Override
     public void request(final int pageIndex, final int pageSize) {
+        if(currentRequest != null && !currentRequest.isDisposed()){
+            currentRequest.dispose();
+        }
+
         getRealRequest(callback, pageIndex, pageSize)
                 .compose(new PagingTransformer<T>(pagingHelper.getBuilder().getLifeCycleProvider(), pagingHelper, pagingHelper.getRetryListener()))
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        currentRequest = disposable;
+                    }
+                })
                 .subscribe(new SimpleObserver<T>() {
                     @Override
                     public void onNext(T t) {

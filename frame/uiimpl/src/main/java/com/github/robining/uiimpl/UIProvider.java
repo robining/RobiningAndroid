@@ -7,12 +7,14 @@ import android.view.View;
 
 import com.github.robining.config.interfaces.ui.IUIProvider;
 import com.github.robining.config.interfaces.ui.dialog.AlertDialog;
+import com.github.robining.config.interfaces.ui.dialog.ProgressDialog;
 import com.github.robining.config.interfaces.ui.dialog.WaitProcessDialog;
 import com.github.robining.config.interfaces.ui.loading.ILoadingHelper;
 import com.github.robining.config.interfaces.ui.refresh.IRefreshLayout;
 import com.github.robining.config.interfaces.ui.toast.Toast;
 import com.github.robining.config.interfaces.ui.toolbar.IToolbar;
 import com.github.robining.uiimpl.dialog.AlterDialogImpl;
+import com.github.robining.uiimpl.dialog.ProgressDialogImpl;
 import com.github.robining.uiimpl.dialog.WaitProcessDialogImpl;
 import com.github.robining.uiimpl.loading.LoadingHelperImpl;
 import com.github.robining.uiimpl.refresh.ProxySmartRefreshLayout;
@@ -61,6 +63,11 @@ public class UIProvider implements IUIProvider {
     @Override
     public AlertDialog applyAlertDialog(Context context) {
         return new AlterDialogImpl(context);
+    }
+
+    @Override
+    public ProgressDialog applyProgressDialog(Context context) {
+        return new ProgressDialogImpl(context);
     }
 
     @Override

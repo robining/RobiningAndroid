@@ -26,7 +26,7 @@ public class WaitProcessDialogImpl extends WaitProcessDialog {
     @Override
     protected void init() {
         super.init();
-        setContentView(R.layout.dialog_progress);
+        setContentView(R.layout.dialog_wait_process);
         viewMessage = (AppCompatTextView) findViewById(R.id.tv_message);
         if (viewMessage != null) {
             viewMessage.setVisibility(View.GONE);

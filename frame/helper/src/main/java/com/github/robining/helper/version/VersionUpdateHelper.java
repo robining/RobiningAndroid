@@ -1,7 +1,7 @@
 package com.github.robining.helper.version;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.github.robining.config.Config;
 import com.github.robining.config.interfaces.ui.dialog.AlertDialog;
+import com.github.robining.config.interfaces.ui.dialog.ProgressDialog;
 import com.github.robining.config.utils.SPUtils;
 import com.github.robining.config.utils.SystemUtil;
 import com.github.robining.helper.ILifeCycleProvider;
@@ -53,6 +54,7 @@ public class VersionUpdateHelper {
 
     /**
      * 获取最后一次获取到的版本更新内容
+     *
      * @return
      */
     public static IVersionEntity getLastVersionInfo() {
@@ -61,13 +63,24 @@ public class VersionUpdateHelper {
 
     /**
      * 设置最新一次获取到的版本信息
+     *
      * @param entity 版本内容
      */
     public static void setLastVersionInfo(IVersionEntity entity) {
         spUtils.put(LAST_VERSION_INFO, entity);
     }
 
+    private static VersionStyleProvider versionStyleProvider = new VersionStyleProvider() {
+        @Override
+        public ProgressDialog provideProgressDialog(Context context) {
+            return Config.getInstance().getUiProvider().applyProgressDialog(context);
+        }
 
+        @Override
+        public AlertDialog provideFoundNewVersionDialog(Context context) {
+            return Config.getInstance().getUiProvider().applyAlertDialog(context);
+        }
+    };
     private static QueryVersionInfoObservableProvider queryVersionInfoObservableProvider;//版本更新请求提供器
 
     public static QueryVersionInfoObservableProvider getQueryVersionInfoObservableProvider() {
@@ -78,11 +91,20 @@ public class VersionUpdateHelper {
         VersionUpdateHelper.queryVersionInfoObservableProvider = queryVersionInfoObservableProvider;
     }
 
+    public static VersionStyleProvider getVersionStyleProvider() {
+        return versionStyleProvider;
+    }
+
+    public static void setVersionStyleProvider(VersionStyleProvider versionStyleProvider) {
+        VersionUpdateHelper.versionStyleProvider = versionStyleProvider;
+    }
+
     /**
      * 通过已知的版本信息进行版本更新
-     * @param activity 页面
+     *
+     * @param activity          页面
      * @param lifeCycleProvider 生命周期控制器
-     * @param updateEntity 版本信息
+     * @param updateEntity      版本信息
      */
     public static void update(final Activity activity, final ILifeCycleProvider lifeCycleProvider, final IVersionEntity updateEntity) {
         Observable.just(updateEntity)
@@ -102,7 +124,7 @@ public class VersionUpdateHelper {
     }
 
     /**
-     * @param activity 页面
+     * @param activity          页面
      * @param lifeCycleProvider 生命周期控制器
      * @return 版本更新进度控制器（包括对话框操作）
      */
@@ -137,7 +159,7 @@ public class VersionUpdateHelper {
      * 显示发现新版本对话框
      */
     public static void showUpdateDialog(final Activity activity, final ILifeCycleProvider lifeCycleProvider, final IVersionEntity updateEntity, final ObservableEmitter<UpdateResult> e) {
-        final AlertDialog dialog = Config.getInstance().getUiProvider().applyAlertDialog(activity);
+        final AlertDialog dialog = versionStyleProvider.provideFoundNewVersionDialog(activity);
         dialog.setTitle("发现新版本:" + updateEntity._getVersionName_());
         dialog.setContent(updateEntity._getUpdateContent_());
         dialog.setPositiveButton("立即更新", new View.OnClickListener() {
@@ -166,14 +188,13 @@ public class VersionUpdateHelper {
 
     /**
      * 显示下载进度对话框
-     * **/
+     **/
     public static void showDownloadDialog(final Activity activity, final ILifeCycleProvider lifeCycleProvider, final IVersionEntity updateEntity, final ObservableEmitter<UpdateResult> e) {
-        final ProgressDialog dialog = new ProgressDialog(activity);
+        final ProgressDialog dialog = versionStyleProvider.provideProgressDialog(activity);
         dialog.setTitle("正在更新");
         dialog.setMax(100);
         dialog.setProgress(0);
         dialog.setCancelable(!updateEntity._isForceUpdate_());
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         dialog.show();
         ProgressListener listener = ProgressListenerPool.getInstance().registerListener(lifeCycleProvider);
         listener.getListener()
@@ -207,13 +228,13 @@ public class VersionUpdateHelper {
                         dialog.setProgress(100);
                         e.onNext(new UpdateResult().setUpdateEntity(updateEntity).setResult(UpdateResult.Result.RESULT_UPDATE_SUCCESS));
                         e.onComplete();
-//                        dialog.dismiss();
+                        //                        dialog.dismiss();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         e.onError(throwable);
-//                        dialog.dismiss();
+                        //                        dialog.dismiss();
                     }
                 });
 

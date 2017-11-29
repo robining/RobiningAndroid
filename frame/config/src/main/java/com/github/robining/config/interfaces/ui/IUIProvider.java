@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.github.robining.config.interfaces.ui.dialog.AlertDialog;
+import com.github.robining.config.interfaces.ui.dialog.ProgressDialog;
 import com.github.robining.config.interfaces.ui.dialog.WaitProcessDialog;
 import com.github.robining.config.interfaces.ui.loading.ILoadingHelper;
 import com.github.robining.config.interfaces.ui.refresh.IRefreshLayout;
@@ -20,6 +21,8 @@ public interface IUIProvider {
     WaitProcessDialog applyWaitProcessDialog(Context context);
 
     AlertDialog applyAlertDialog(Context context);
+
+    ProgressDialog applyProgressDialog(Context context);
 
     Toast applyToast();
 
