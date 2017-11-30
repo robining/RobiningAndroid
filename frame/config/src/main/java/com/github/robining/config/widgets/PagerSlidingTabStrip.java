@@ -73,6 +73,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private static final int DEFAULT_TAB_TEXT_COLOR = 0xFF666666;
     private int tabSelectedTextColor;
     private int tabUnselectedTextColor;
+    private int tabSelectedTextSize;
+    private int tabUnselectedTextSize;
 
     private Paint rectPaint;
     private Paint dividerPaint;
@@ -157,6 +159,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
         tabSelectedTextColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsTabSelectedTextColor, DEFAULT_TAB_TEXT_COLOR);
         tabUnselectedTextColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsTabUnselectedTextColor, DEFAULT_TAB_TEXT_COLOR);
+        tabSelectedTextSize = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsTabSelectedTextSize,tabTextSize);
+        tabUnselectedTextSize = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsTabUnSelectedTextSize,tabTextSize);
 
         a.recycle();
 
@@ -273,10 +277,16 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (v instanceof TextView) {
 
                 TextView tab = (TextView) v;
-                tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                 tab.setTypeface(tabTypeface, tabTypefaceStyle);
-                tab.setTextColor(tabTextColor);
-
+                if (pager.getCurrentItem() == i) {
+                    tab.setTextColor(tabSelectedTextColor);
+                    tab.setSelected(true);
+                    tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabSelectedTextSize);
+                } else {
+                    tab.setTextColor(tabUnselectedTextColor);
+                    tab.setSelected(false);
+                    tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabUnselectedTextSize);
+                }
                 // setAllCaps() is only available from API 14, so the upper case is made manually if we are on a
                 // pre-ICS-build
                 if (textAllCaps) {
@@ -389,7 +399,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
             }
-            updateTabsTextColors();
         }
 
     }
@@ -553,17 +562,22 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         return this;
     }
 
-    private void updateTabsTextColors() {
-        for (int i = 0; i < tabCount; i++) {
-            View v = tabsContainer.getChildAt(i);
-            if (v instanceof TextView) {
-                TextView tab = (TextView) v;
-                if (pager.getCurrentItem() == i)
-                    tab.setTextColor(tabSelectedTextColor);
-                else
-                    tab.setTextColor(tabUnselectedTextColor);
-            }
-        }
+    public int getTabSelectedTextSize() {
+        return tabSelectedTextSize;
+    }
+
+    public PagerSlidingTabStrip setTabSelectedTextSize(int tabSelectedTextSize) {
+        this.tabSelectedTextSize = tabSelectedTextSize;
+        return this;
+    }
+
+    public int getTabUnselectedTextSize() {
+        return tabUnselectedTextSize;
+    }
+
+    public PagerSlidingTabStrip setTabUnselectedTextSize(int tabUnselectedTextSize) {
+        this.tabUnselectedTextSize = tabUnselectedTextSize;
+        return this;
     }
 
     @Override

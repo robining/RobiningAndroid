@@ -13,8 +13,10 @@
         <attr name="pstsTabBackground" format="reference"/>
         <attr name="pstsShouldExpand" format="boolean"/>
         <attr name="pstsTextAllCaps" format="boolean"/>
-        <attr name="pstsTabSelectedTextColor" format="color" />
-        <attr name="pstsTabUnselectedTextColor" format="color" />
+        <attr name="pstsTabSelectedTextColor" format="color"/>
+        <attr name="pstsTabUnselectedTextColor" format="color"/>
+        <attr name="pstsTabSelectedTextSize" format="dimension"/>
+        <attr name="pstsTabUnSelectedTextSize" format="dimension"/>
     </declare-styleable>
 
 </resources>
