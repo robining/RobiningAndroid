@@ -399,6 +399,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
             }
+            updateTabStyles();
         }
 
     }
