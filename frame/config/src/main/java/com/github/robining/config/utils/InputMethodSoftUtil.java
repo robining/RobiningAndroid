@@ -77,7 +77,7 @@ public class InputMethodSoftUtil {
             return;
         }
 
-        String [] arr = new String[]{"mCurRootView", "mServedView", "mNextServedView"};
+        String [] arr = new String[]{"mCurRootView", "mServedView", "mNextServedView","mLastSrvView"};
         Field f = null;
         Object obj_get = null;
         for (int i = 0;i < arr.length;i ++) {
