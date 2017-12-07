@@ -23,16 +23,22 @@ import io.reactivex.functions.Consumer;
 public class DialogLoadingTransformer<T> implements ObservableTransformer<T, T> {
     private ILifeCycleProvider lifeCycle;
     private IContextProvider activityContextProvider;
+    private boolean onNextCancelDialog = false;
 
     public DialogLoadingTransformer(ILifeCycleProvider lifeCycle, IContextProvider activityContextProvider) {
         this.lifeCycle = lifeCycle;
         this.activityContextProvider = activityContextProvider;
     }
 
+    public DialogLoadingTransformer(ILifeCycleProvider lifeCycle, IContextProvider activityContextProvider, boolean onNextCancelDialog) {
+        this(lifeCycle, activityContextProvider);
+        this.onNextCancelDialog = true;
+    }
+
     @Override
     public ObservableSource<T> apply(Observable<T> upstream) {
         final WaitProcessDialog progressDialog = Config.getInstance().getUiProvider().applyWaitProcessDialog(activityContextProvider.provideContext());
-        return upstream
+        upstream = upstream
                 .compose(lifeCycle.<T>bindLifecycle())
                 .compose(TransformerProvider.<T>provideSchedulers())
                 .compose(TransformerProvider.<T>provideErrorHandler())
@@ -48,18 +54,29 @@ public class DialogLoadingTransformer<T> implements ObservableTransformer<T, T> 
                         });
                         progressDialog.show();
                     }
-                })
-                .doOnComplete(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        progressDialog.dismiss();
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(@NonNull Throwable throwable) throws Exception {
-                        progressDialog.dismiss();
-                    }
                 });
+
+        if (onNextCancelDialog) {
+            upstream = upstream.doOnNext(new Consumer<T>() {
+                @Override
+                public void accept(T t) throws Exception {
+                    progressDialog.dismiss();
+                }
+            });
+        } else {
+            upstream = upstream.doOnComplete(new Action() {
+                @Override
+                public void run() throws Exception {
+                    progressDialog.dismiss();
+                }
+            });
+        }
+
+        return upstream.doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+                progressDialog.dismiss();
+            }
+        });
     }
 }
