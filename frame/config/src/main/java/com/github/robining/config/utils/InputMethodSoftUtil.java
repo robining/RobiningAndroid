@@ -94,7 +94,7 @@ public class InputMethodSoftUtil {
                         f.set(imm, null); // 置空，破坏掉path to gc节点
                     } else {
                         // 不是想要目标销毁的，即为又进了另一层界面了，不要处理，避免影响原逻辑,也就不用继续for循环了
-                        break;
+                        continue;
                     }
                 }
             }catch(Throwable t){
