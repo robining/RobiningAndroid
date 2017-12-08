@@ -39,8 +39,7 @@ public class DialogLoadingTransformer<T> implements ObservableTransformer<T, T> 
     public ObservableSource<T> apply(Observable<T> upstream) {
         final WaitProcessDialog progressDialog = Config.getInstance().getUiProvider().applyWaitProcessDialog(activityContextProvider.provideContext());
         upstream = upstream
-                .compose(lifeCycle.<T>bindLifecycle())
-                .compose(TransformerProvider.<T>provideSchedulers())
+                .compose(TransformerProvider.<T>provideSchedulers(lifeCycle))
                 .compose(TransformerProvider.<T>provideErrorHandler())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
