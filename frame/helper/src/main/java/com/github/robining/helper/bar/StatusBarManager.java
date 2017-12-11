@@ -1,6 +1,8 @@
 package com.github.robining.helper.bar;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -117,8 +119,10 @@ public class StatusBarManager {
                 if (systemStatusManager.getConfig().hasNavigtionBar()) {
                     if (systemStatusManager.getConfig().isNavigationAtBottom() && navigationBarPadding) {
                         paddingBottom += systemStatusManager.getConfig().getNavigationBarHeight();
-                    } else {//不在底部便在右边
-                        paddingRight += systemStatusManager.getConfig().getNavigationBarWidth();
+                    } else{//不在底部便在右边
+                        if(!isScreenOriatationPortrait(activity)){
+                            paddingRight += systemStatusManager.getConfig().getNavigationBarWidth();
+                        }
                     }
                 }
 
@@ -203,4 +207,15 @@ public class StatusBarManager {
         return (flag & WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 == WindowManager.LayoutParams.FLAG_FULLSCREEN;
     }
+
+    /**
+     * 是否处于竖屏状态
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isScreenOriatationPortrait(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
 }
