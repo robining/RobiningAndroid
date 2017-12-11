@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.github.robining.config.interfaces.ui.dialog.ProgressDialog;
 import com.github.robining.uiimpl.R;
 
+import java.math.BigDecimal;
+
 /**
  * 功能描述:@TODO 填写功能描述
  * Created by LuoHaifeng on 2017/7/18.
@@ -54,7 +56,8 @@ public class ProgressDialogImpl extends ProgressDialog {
         } else {
             progressBar.setIndeterminate(false);
             float percent = progressBar.getProgress() / (float) progressBar.getMax();
-            progressTextView.setText(String.format("%0.2f%%", percent));
+            BigDecimal bigDecimal = new BigDecimal(percent);
+            progressTextView.setText(bigDecimal.setScale(2,BigDecimal.ROUND_HALF_UP) + "%");
         }
     }
 
