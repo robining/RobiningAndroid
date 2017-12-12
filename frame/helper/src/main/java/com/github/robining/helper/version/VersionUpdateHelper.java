@@ -198,6 +198,7 @@ public class VersionUpdateHelper {
         dialog.show();
         ProgressListener listener = ProgressListenerPool.getInstance().registerListener(lifeCycleProvider);
         listener.getListener()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<ProgressEntity>() {
                     @Override
                     public void accept(@NonNull ProgressEntity progressEntity) throws Exception {
