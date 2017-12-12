@@ -56,7 +56,7 @@ public class ProgressDialogImpl extends ProgressDialog {
         } else {
             progressBar.setIndeterminate(false);
             float percent = progressBar.getProgress() / (float) progressBar.getMax();
-            BigDecimal bigDecimal = new BigDecimal(percent);
+            BigDecimal bigDecimal = new BigDecimal(percent).multiply(new BigDecimal(100));
             progressTextView.setText(bigDecimal.setScale(2,BigDecimal.ROUND_HALF_UP) + "%");
         }
     }
