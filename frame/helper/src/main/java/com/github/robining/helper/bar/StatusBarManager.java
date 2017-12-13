@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -23,11 +22,13 @@ import java.lang.reflect.Method;
 
 public class StatusBarManager {
     private Activity activity;//设置状态栏的目标
-    private int statusBarColor = Color.BLACK;//状态栏颜色(顶部)
-    private int navigationBarColor = Color.BLACK;//导航栏颜色(底部或右边)
+    private Integer statusBarColor = null;//状态栏颜色(顶部)
+    private Integer navigationBarColor = null;//导航栏颜色(底部或右边)
     private boolean statusBarPadding = true;//是否预留状态栏空间
     private boolean navigationBarPadding = true;//是否预留导航栏颜色
     private boolean darkStatusTextColor = true;//状态栏文字颜色
+    private int defaultStatusBarColor = Color.BLACK;
+    private int defaultNavigationBarColor = Color.BLACK;
 
     public StatusBarManager(@NonNull Activity activity) {
         this.activity = activity;
@@ -85,57 +86,38 @@ public class StatusBarManager {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                         | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
                 );//取消状态栏和导航栏的透明
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                int uiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                if (!statusBarPadding) {
+                    uiVisibility |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                }
+                if (!navigationBarPadding) {
+                    uiVisibility |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+                }
+                window.getDecorView().setSystemUiVisibility(uiVisibility);
+
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(statusBarColor);
-                window.setNavigationBarColor(navigationBarColor);
+                if (!statusBarPadding) {
+                    window.setStatusBarColor(Color.TRANSPARENT);
+                } else {
+                    window.setStatusBarColor(statusBarColor == null ? defaultStatusBarColor : statusBarColor);
+                }
+
+                if (!navigationBarPadding) {
+                    window.setNavigationBarColor(Color.TRANSPARENT);
+                } else {
+                    window.setNavigationBarColor(navigationBarColor == null ? defaultNavigationBarColor : navigationBarColor);
+                }
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);//设置状态栏和导航栏的透明
                 SystemStatusManager systemStatusManager = new SystemStatusManager(activity);//必须设置在addFlags之后
                 systemStatusManager.setStatusBarTintEnabled(true);
-                systemStatusManager.setStatusBarTintColor(statusBarColor);
+                systemStatusManager.setStatusBarTintColor(statusBarColor == null ? defaultStatusBarColor : statusBarColor);
                 systemStatusManager.setNavigationBarTintEnabled(true);
-                systemStatusManager.setNavigationBarTintColor(navigationBarColor);
-            }
-
-            ViewGroup contentView = activity.findViewById(Window.ID_ANDROID_CONTENT);
-            View childView = null;
-            if (contentView != null) {
-                childView = contentView.getChildAt(0);
-            }
-
-            if (childView != null) {
-                childView.setFitsSystemWindows(false);
-                int paddingLeft = contentView.getPaddingLeft();
-                int paddingTop = contentView.getPaddingTop();
-                int paddingRight = contentView.getPaddingRight();
-                int paddingBottom = contentView.getPaddingBottom();
-                SystemStatusManager systemStatusManager = new SystemStatusManager(activity);
-                if (statusBarPadding) {
-                    paddingTop += systemStatusManager.getConfig().getStatusBarHeight();
-                }
-                if (systemStatusManager.getConfig().hasNavigtionBar()) {
-                    if (systemStatusManager.getConfig().isNavigationAtBottom() && navigationBarPadding) {
-                        paddingBottom += systemStatusManager.getConfig().getNavigationBarHeight();
-                    } else{//不在底部便在右边
-                        if(!isScreenOriatationPortrait(activity)){
-                            paddingRight += systemStatusManager.getConfig().getNavigationBarWidth();
-                        }
-                    }
-                }
-
-                if (!isFullScreen(activity)) {
-                    contentView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-                } else {
-                    if (!systemStatusManager.getConfig().isNavigationAtBottom()) {
-                        contentView.setPadding(contentView.getPaddingLeft(), contentView.getPaddingTop(), contentView.getPaddingRight() + paddingRight, contentView.getPaddingBottom());
-                    }
-                }
+                systemStatusManager.setNavigationBarTintColor(navigationBarColor == null ? defaultNavigationBarColor : navigationBarColor);
             }
         }
 
+        //设置状态栏文字颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             setMStatusBarLightMode(window, darkStatusTextColor);
         }
